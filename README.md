@@ -28,3 +28,7 @@ Although inventory script is not strictly required to follow Ansible module and 
 - Cache expiration may be improved to support multi-timezone controlling nodes (for cross-globe enterprises).
 - Get additional and/or custom IPAM attributes from other SWIS table[s].
 - Improve cache invalidation and output stream handling.
+
+## See also
+
+- [Random network IP-address generator, fast IP-network tree builder and long prefix match (LPM) function](https://gist.github.com/alexkross/7f80accff12649b940fc9779813b9b91)
