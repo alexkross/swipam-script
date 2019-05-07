@@ -11,6 +11,7 @@ Although inventory script is not strictly required to follow Ansible module and 
 
 ## Main features
 
+- SwisClient class adjusted to override outside proxy settings for direct connection.
 - Cache is daily based. Recache will occurr on any cache file timestamped before midnight.
 - 3 options to recache: 1) cli parameter, 2) manual cahe file delete, 3) touching .ini file.
 - Adaptive script name to avoid collisions. Leading digit and underscore are removed if used for parsing ordering in a single inventory directory (that is common practice).

@@ -1,12 +1,18 @@
 #!/usr/bin/env python
 # vim: set fileencoding=utf-8 :
 #
+# SolarWinds IPAM as an Ansible dynamic inventory
+# <https://github.com/alexkross/swipam-script>
+# Designed for huge network topologies.
+# See also <https://gist.github.com/alexkross/7f80accff12649b940fc9779813b9b91>
+#
 # This script is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# See Full Licence in the .ini
+# You should have received a copy of the GNU General Public License
+# along with it.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
 assert sys.version_info > (3, 2), "Python 3.2 or newer is required."
@@ -134,7 +140,7 @@ class Inventory(object):
             self.session = _SwisClient(self.host, self.user, self.password)
         return self.session
 
-    def _query_tree(self, per_page=500):
+    def _query_tree(self, per_page=512):
         t = c = s = per_page # to, count, step (const)
         f = 1 # from
         raw = []
