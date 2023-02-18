@@ -1,13 +1,25 @@
-# swipam-script
-Ansible dynamic inventory script (not plugin) for SolarWinds IPAM product (IPAM.Subnet and IPAM.IPNode tables at scale)
+# swipam-script - Ansible dynamic inventory script (not plugin) for SolarWinds IPAM (IPAM.Subnet and IPAM.IPNode tables at scale)
+
+Updated on Feb, 2023.
 
 If you does not have IPAM, but other SolarWinds product that populate Orion.Nodes table you should look at [solarwinds-ansible-inv script](https://github.com/cbabs/solarwinds-ansible-inv) or forks.
 
-The repository also include an example of constructed plugin script that builds additional host groups based on Comment, MachineType (Vendor), Location, etc fields from IPAM.
+The repository also includes an example of constructed plugin script that builds additional host groups based on Comment, MachineType (Vendor), Location, etc fields from IPAM.
 
 To get readable output (dropping verbose groups var) from constructed plugin script use command: ``ansible -m debug -a "msg={{hostvars[inventory_hostname]|dict2items|rejectattr(\"key\", \"eq\", \"groups\")|list|items2dict}}" <group_or_host>``
 
-Although inventory script is not strictly required to follow Ansible module and plugin development rules and convetions, and even may be written not in Python, I hesitate to PR it into ansible/contrib/inventory until I will sure that the code is Python 2.7 compatible. Since the development is conducted out of working time and the current code works well in my environment this may be not very soon. Interested parties are welcome to provide comments or feature requests though.
+Intended to run daily. Although collection from IPAM is pretty fast, Ansible is very slow in making goups with advanced plugins. To make the inventory run instantly you can use the following aliases:
+
+```bash
+hosts_inventory () if [[ -f hosts.toml ]]; then echo --inventory hosts.toml; fi
+alias ansible-inventory='ansible-inventory --graph --playbook-dir . $(hosts_inventory)' #--vars is too verbose when facts are collected
+alias ansible='ansible --playbook-dir . $(hosts_inventory)'
+alias ansible-playbook='ansible-playbook $(hosts_inventory)'
+```
+
+Although inventory script is not strictly required to follow Ansible module and plugin development rules and convetions, and even may be written not in Python, I hesitate to PR it into ansible/contrib/inventory for some reasons.
+
+The current code works well in my environment for more than 4 years (as of time of current commit). That said and because the development is conducted out of working time, the code is provided as is without warranty of any kind. Interested parties are welcome to provide comments or feature requests though.
 
 ## Main features
 
@@ -20,6 +32,7 @@ Although inventory script is not strictly required to follow Ansible module and 
 - Not only all IPAM groups hierarchy are preserved, but final subnets (not supernets) also become host groups.
 - Name mangling is minimal. Currently only ' /' is replaced with '/'. Be aware.
 - Works at scale and tested in Python 3.7 environment.
+- Zipped backup of pulled subnet along with index.
 
 ## ToDo list (on demand)
 
