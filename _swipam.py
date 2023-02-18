@@ -25,7 +25,7 @@ from itertools import compress
 from ipaddress import ip_address, ip_network
 from datetime import datetime
 from dateutil.tz import tzlocal
-from zipfile import ZipFile, ZIP_DEFLATED # ZipInfo, ZipExtFile,
+from zipfile import ZipFile, ZIP_DEFLATED
 
 from ansible.module_utils.six.moves import configparser as ConfigParser
 
@@ -43,7 +43,7 @@ disable_warnings(category=urllib3exc.InsecureRequestWarning)
 class _SwisClient (SwisClient): # to override proxy settings
     def _req(self, method, frag, data=None):
         resp = self._session.request(method, self.url + frag,
-            data=json.dumps(data, default=lambda obj: obj.isoformat() if isinstance(obj, datetime) else None), #default=_json_serial
+            data=json.dumps(data, default=lambda obj: obj.isoformat() if isinstance(obj, datetime) else None),
             proxies={"http": None, "https": None}, # quick fix to override proxy environment settings if any
             #verify=self._session.verify, headers={'Content-Type': 'application/json'}
         )
@@ -59,7 +59,7 @@ def json_format_dict(data, pretty=False): # Converts a dict to a JSON object and
     return json.dumps(data, sort_keys=True, indent=2) if pretty else json.dumps(data)
 
 def _to_safe(word): # Converts 'bad' characters in a string to underscores so they can be used as Ansible groups
-    return word.replace(' /', '/') # ``re.sub("[^A-Za-z0-9\_]", "_", word.replace(" ", ""))`` may be an overkill, be ready to see lots of ____, adapt as needed. ToDo: make it a ini-file parameter.
+    return word.replace(' /', '/')
 
 _ipn = partial(ip_network, strict=False)
 def _ipn_tree(ns):
@@ -93,7 +93,7 @@ def _root(sup, id):
 
 name = path.basename(__file__).split('.')[0]
 if not name[0].isalpha(): # leading '_' or digit[s] to make special parsing order
-    name = name.strip('_1234567890') # Note: from the end too.
+    name = name.strip('_1234567890') # Note: from the EOL too.
 
 class Inventory(object):
     def __init__(self):
@@ -153,7 +153,6 @@ class Inventory(object):
     def _parse_cli_args(self): # Command line argument processing
         parser = argparse.ArgumentParser(description='Produce an Ansible Inventory from SolarWinds IPAM and make a cache valid until next day')
         parser.add_argument('--list', action='store_true', default=True, help='List instances (default: True)')
-        # ToDo: parser.add_argument('--host', action='store', help='Get all the variables about a specific instance from cache')
         parser.add_argument('--get-swipam-cache', action='store_true', default=False, help='Get swipam cache file name')
         parser.add_argument('--get-local-cache', action='store_true', default=False, help='Get local cache file name (Is always used if exists. Delete to update.)')
         parser.add_argument('--refresh-cache', action='store_true', default=False, help='Remove "{}" (same as touch "{}")'.format(self.swipam_cache_path, self.config_path))

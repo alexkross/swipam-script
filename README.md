@@ -6,8 +6,6 @@ If you does not have IPAM, but other SolarWinds product that populate Orion.Node
 
 The repository also includes an example of constructed plugin script that builds additional host groups based on Comment, MachineType (Vendor), Location, etc fields from IPAM.
 
-To get readable output (dropping verbose groups var) from constructed plugin script use command: ``ansible -m debug -a "msg={{hostvars[inventory_hostname]|dict2items|rejectattr(\"key\", \"eq\", \"groups\")|list|items2dict}}" <group_or_host>``
-
 Intended to run daily. Although collection from IPAM is pretty fast, Ansible is very slow in making goups with advanced plugins. To make the inventory run instantly you can use the following aliases:
 
 ```bash
