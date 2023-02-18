@@ -9,6 +9,7 @@ The repository also includes an example of constructed plugin script that builds
 Intended to run daily. Although collection from IPAM is pretty fast, Ansible is very slow in making goups with advanced plugins. To make the inventory run instantly you can use the following aliases:
 
 ```bash
+alias mkhosts='ansible-inventory --list --export --toml --output hosts.toml'
 hosts_inventory () if [[ -f hosts.toml ]]; then echo --inventory hosts.toml; fi
 alias ansible-inventory='ansible-inventory --graph --playbook-dir . $(hosts_inventory)' #--vars is too verbose when facts are collected
 alias ansible='ansible --playbook-dir . $(hosts_inventory)'
